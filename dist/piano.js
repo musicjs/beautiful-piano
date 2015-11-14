@@ -1,0 +1,217 @@
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.piano = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var domify = require('domify');
+
+var blackKeyClassMap = {
+    C: 0,
+    D: 1,
+    E: 2,
+    F: 3,
+    G: 4,
+    A: 5,
+    B: 6
+};
+
+var keys = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+
+var keyReverseMap = {
+    C: 0,
+    D: 1,
+    E: 2,
+    F: 3,
+    G: 4,
+    A: 5,
+    B: 6
+};
+
+var keysLength = keys.length;
+
+// black keys belongs to the previous white key
+// It's the DOM representation
+// avoid here to use #, because it's not a valid CSS selector
+var blackKeyMap = {
+    C: false,
+    D: ['Cs', 'Db'],
+    E: ['Ds', 'Eb'],
+    F: false,
+    G: ['Fs', 'Gb'],
+    A: ['Gs', 'Ab'],
+    B: ['As', 'Bb']
+};
+
+var convertAccidental = function(keyName) {
+    return keyName.replace('s', '♯').replace('b', '♭');
+}
+
+var octaves = [0,1,2,3,4,5,6,7,8,9,10];
+
+module.exports = function(parent, options) {
+    if (options == null) {options = {}}
+
+    var startKey = 'A';
+    var startOctave = 3;
+    var endKey = 'C'
+    var endOctave = 5;
+    var namesMode = 0; // show sharps as default
+    if (options.octaves != null) {
+        if (options.octaves <= 0) {
+            console.warn('octaves need to be a positive number!');
+        }
+        var o = parseInt(options.octaves);
+        var oHalf = Math.floor(o/2);
+        if (o % 2 === 1) {
+            startOctave = 3 - oHalf;
+            endOctave = 4 + oHalf + 1;
+        } else {
+            startOctave = 3 - oHalf;
+            endOctave = 4 + oHalf;
+        }
+
+    } else if (options.range != null) {
+        startKey = options.range.startKey;
+        startOctave = parseInt(options.range.startOctave);
+        endKey = options.range.endKey;
+        endOctave = parseInt(options.range.endOctave);
+
+    }
+    if (options.namesMode != null) {
+        if (options.namesMode === 'flat')  {
+            namesMode = 1;
+        }
+    }
+    var keyElementArray = [];
+    var firstOccurrence = true;
+    for (var o=startOctave; o<=endOctave; o++) {
+        for (var k=keyReverseMap[startKey]; k<(o === endOctave ? keyReverseMap[endKey]+1 : keysLength); k++) {
+            var n = keys[k]; // key name
+            if (blackKeyMap[n] && !firstOccurrence) {
+                var blackNames = blackKeyMap[n].map(function(k) {return k+o});
+                keyElementArray.push('<li><div data-keyname=' +  n + o + ' class="anchor ' + n + o + '"></div><span data-keyname="' + convertAccidental(blackKeyMap[n][namesMode]) + '" class="' + blackNames.join(' ') + '"></span></li>');
+            } else {
+                keyElementArray.push('<li><div data-keyname=' + n + o + ' class="anchor ' + n + o + '"></div></li>');
+            }
+            if (firstOccurrence) {
+                firstOccurrence = false;
+            }
+        }
+        startKey = 'C'; // continue next octave from C
+    }
+    var pianoWrapper = domify('<ul id="beautiful-piano">\n  ' + keyElementArray.join('\n  ') + '</ul>')
+    parent.appendChild(pianoWrapper);
+}
+
+},{"domify":2}],2:[function(require,module,exports){
+
+/**
+ * Expose `parse`.
+ */
+
+module.exports = parse;
+
+/**
+ * Tests for browser support.
+ */
+
+var innerHTMLBug = false;
+var bugTestDiv;
+if (typeof document !== 'undefined') {
+  bugTestDiv = document.createElement('div');
+  // Setup
+  bugTestDiv.innerHTML = '  <link/><table></table><a href="/a">a</a><input type="checkbox"/>';
+  // Make sure that link elements get serialized correctly by innerHTML
+  // This requires a wrapper element in IE
+  innerHTMLBug = !bugTestDiv.getElementsByTagName('link').length;
+  bugTestDiv = undefined;
+}
+
+/**
+ * Wrap map from jquery.
+ */
+
+var map = {
+  legend: [1, '<fieldset>', '</fieldset>'],
+  tr: [2, '<table><tbody>', '</tbody></table>'],
+  col: [2, '<table><tbody></tbody><colgroup>', '</colgroup></table>'],
+  // for script/link/style tags to work in IE6-8, you have to wrap
+  // in a div with a non-whitespace character in front, ha!
+  _default: innerHTMLBug ? [1, 'X<div>', '</div>'] : [0, '', '']
+};
+
+map.td =
+map.th = [3, '<table><tbody><tr>', '</tr></tbody></table>'];
+
+map.option =
+map.optgroup = [1, '<select multiple="multiple">', '</select>'];
+
+map.thead =
+map.tbody =
+map.colgroup =
+map.caption =
+map.tfoot = [1, '<table>', '</table>'];
+
+map.polyline =
+map.ellipse =
+map.polygon =
+map.circle =
+map.text =
+map.line =
+map.path =
+map.rect =
+map.g = [1, '<svg xmlns="http://www.w3.org/2000/svg" version="1.1">','</svg>'];
+
+/**
+ * Parse `html` and return a DOM Node instance, which could be a TextNode,
+ * HTML DOM Node of some kind (<div> for example), or a DocumentFragment
+ * instance, depending on the contents of the `html` string.
+ *
+ * @param {String} html - HTML string to "domify"
+ * @param {Document} doc - The `document` instance to create the Node for
+ * @return {DOMNode} the TextNode, DOM Node, or DocumentFragment instance
+ * @api private
+ */
+
+function parse(html, doc) {
+  if ('string' != typeof html) throw new TypeError('String expected');
+
+  // default to the global `document` object
+  if (!doc) doc = document;
+
+  // tag name
+  var m = /<([\w:]+)/.exec(html);
+  if (!m) return doc.createTextNode(html);
+
+  html = html.replace(/^\s+|\s+$/g, ''); // Remove leading/trailing whitespace
+
+  var tag = m[1];
+
+  // body support
+  if (tag == 'body') {
+    var el = doc.createElement('html');
+    el.innerHTML = html;
+    return el.removeChild(el.lastChild);
+  }
+
+  // wrap map
+  var wrap = map[tag] || map._default;
+  var depth = wrap[0];
+  var prefix = wrap[1];
+  var suffix = wrap[2];
+  var el = doc.createElement('div');
+  el.innerHTML = prefix + html + suffix;
+  while (depth--) el = el.lastChild;
+
+  // one element
+  if (el.firstChild == el.lastChild) {
+    return el.removeChild(el.firstChild);
+  }
+
+  // several elements
+  var fragment = doc.createDocumentFragment();
+  while (el.firstChild) {
+    fragment.appendChild(el.removeChild(el.firstChild));
+  }
+
+  return fragment;
+}
+
+},{}]},{},[1])(1)
+});

@@ -12,7 +12,7 @@ Either embed the file from the `dist` directory via script tag in your HTML:
 
 Then you can access to the global variable `piano`.
 
-Otherwise install it via npm `npm i beatiful-piano`
+Otherwise install it via npm `npm i beautiful-piano`
 
 Don't forget to include the CSS file, for instance:
 
@@ -46,8 +46,7 @@ You can also pass a `namesMode` property.
 
 ### Demo
 
-See the demo on [rawgit](https://rawgit.com/MusicJS/beatiful-piano/master/demo
-/index.html)
+See the demo on [rawgit](https://rawgit.com/MusicJS/beautiful-piano/master/demo/index.html)
 
 ## WTF? I can't hear anything!
 
