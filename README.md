@@ -1,7 +1,11 @@
 # Beautiful Piano
 
+[![npm version](https://img.shields.io/npm/v/beautiful-piano.svg)](https://www.npmjs.com/package/beautiful-piano)
+[![npm dependencies](https://img.shields.io/david/MusicJS/beautiful-piano.svg)](https://david-dm.org/MusicJS/beautiful-piano)
+[![npm dev dependencies](https://img.shields.io/david/dev/MusicJS/beautiful-piano.svg)](https://david-dm.org/MusicJS/beautiful-piano#info=devDependencies)
+
 This library provides a JavaScript API to generate HTML markup for a
-beautiful musical keyboard. It comes with a CSS file which makes
+beautiful musical keyboard. It comes with a CSS file which makes it so nice.
 
 ## Setup
 Either embed the file from the `dist` directory via script tag in your HTML:
