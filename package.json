@@ -1,0 +1,30 @@
+{
+  "name": "beautiful-piano",
+  "version": "0.0.1",
+  "description": "beautiful visualization of piano keys with pressed keys effect in plain HTML&CSS",
+  "main": "index.js",
+  "scripts": {
+    "build": "mkdir -p dist && browserify index.js -o dist/piano.js -s piano"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/musicJS/beautiful-piano.git"
+  },
+  "keywords": [
+    "piano",
+    "keyboard",
+    "music"
+  ],
+  "author": "Anton Wilhelm",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/musicJS/beautiful-piano/issues"
+  },
+  "homepage": "https://github.com/musicJS/beautiful-piano#readme",
+  "dependencies": {
+    "domify": "^1.4.0"
+  },
+  "devDependencies": {
+    "browserify": "^12.0.1"
+  }
+}
