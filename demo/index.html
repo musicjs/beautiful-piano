@@ -64,6 +64,11 @@
 	</form>
 	<script>
 		var container = document.querySelector('.piano-container');
+		// initial setup
+		piano(container, {octaves: 1});
+
+		// setup form with different input types to play around with the API
+		// in interactive mode
 		var typeInput = document.querySelectorAll('input[name="option-type"]');
 		var octaveInput = document.querySelector('#octaveChanger');
 		var rangeStartKey = document.querySelector('#startKey');
@@ -150,8 +155,6 @@
 		rangeEndKey.addEventListener('change', setCustomRange);
 		rangeEndOctave.addEventListener('change', setCustomRange);
 
-		// initial setup
-		piano(container, {octaves: 1});
 	</script>
 	</body>
 </html>
