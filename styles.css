@@ -135,17 +135,17 @@ d
 
 
 /* white keys */
-.piano-show-names #beautiful-piano div[data-keyname]:not(:active):after {
+.piano-show-names #beautiful-piano div[data-keyname]:not(:active):not(.active):after {
   font-family: Arial, sans-serif;
-  font-size: 11px;
+  font-size: 20px;
   content: attr(data-keyname);
   position: absolute;
   bottom: 25px;
-  left: 30%;
+  left: 20%;
 }
 
 /* black keys */
-.piano-show-names #beautiful-piano span[data-keyname]:not(:active):after {
+.piano-show-names #beautiful-piano span[data-keyname]:not(:active):not(.active):after {
   color: white;
   font-family: Arial, sans-serif;
   font-size: 11px;
