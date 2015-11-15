@@ -10,6 +10,10 @@
 This library provides a JavaScript API to generate HTML markup for a
 beautiful musical keyboard. It comes with a CSS file which makes it so nice.
 
+### Demo
+
+See the demo on [rawgit](https://rawgit.com/MusicJS/beautiful-piano/master/demo/index.html)
+
 ## Setup
 Either embed the file from the `dist` directory via script tag in your HTML:
 
@@ -71,10 +75,6 @@ All 12 keys for the fourth octave can be accessed with these selectors:
 `.A4`<br>
 `.As4` or `.Bb`<br>
 `.B`
-
-### Demo
-
-See the demo on [rawgit](https://rawgit.com/MusicJS/beautiful-piano/master/demo/index.html)
 
 ## WTF? I can't hear anything!
 
