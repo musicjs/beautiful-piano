@@ -75,6 +75,7 @@
 			<label>Show flats: <input type="checkbox" id="show-flats"></label>
 			<label>shrink width: <input type="checkbox" id="shrink"></label>
 			<label>press C chord: <input type="checkbox" id="c-chord"></label>
+			<label>animation: <input type="checkbox" id="animation"></label>
 		</fieldset>
 	</form>
 	<script>
@@ -95,7 +96,8 @@
 		var showNamesInput = document.querySelector('#names');
 		var showFlats = document.querySelector('#show-flats');
 		var shrinkInput = document.querySelector('#shrink');
-		var cChord = document.querySelector('#c-chord');
+		var cChordCheckbox = document.querySelector('#c-chord');
+		var animationCheckbox = document.querySelector('#animation');
 
 		var clearContainer = function() {
 			while (container.firstChild) {
@@ -174,7 +176,7 @@
 			}
 		});
 
-		cChord.addEventListener('change', function(e) {
+		cChordCheckbox.addEventListener('change', function(e) {
 			if (e.target.checked) {
 				document.querySelector('.C4').classList.add('active');
 				document.querySelector('.E4').classList.add('active');
@@ -185,6 +187,34 @@
 				document.querySelector('.G4').classList.remove('active');
 			}
 		});
+
+		animationCheckbox.addEventListener('change', function(e) {
+			// turn off in case the chord is still checked
+			cChordCheckbox.checked = false;
+			document.querySelector('.C4').classList.remove('active');
+			document.querySelector('.E4').classList.remove('active');
+			document.querySelector('.G4').classList.remove('active');
+
+			var keys = ['.C4', '.Cs4', '.D4', '.Ds4', '.E4', '.F4', '.Fs4', '.G4', '.Gs4', '.A4', '.As4', '.B4'];
+			for (var i=0; i<keys.length; i++) {
+				// use IIFE to keep i in sync
+				(function(i) {
+					setTimeout(function() {
+						document.querySelector(keys[i]).classList.add('active');
+							(function(i) {
+							setTimeout(function() {
+								document.querySelector(keys[i]).classList.remove('active');
+								if (i === keys.length-1) {
+									animationCheckbox.checked = false;
+								}
+							}, 200);
+						})(i);
+					}, i*300);
+				})(i);
+
+			}
+		});
+
 
 	</script>
 	</body>
