@@ -31,7 +31,7 @@ var keysLength = keys.en.length;
 // black keys belongs to the previous white key
 // It's the DOM representation
 // avoid here to use #, because it's not a valid CSS selector
-var blackKeyMap = {
+var blackKeyNameMap = {
     en: {
         C: false,
         D: ['&nbsp;C#', '&nbsp;Db'],
@@ -50,6 +50,15 @@ var blackKeyMap = {
         A: ['Gis', '&nbsp;As'],
         B: ['&nbsp;As', '&nbsp;&nbsp;B']
     }
+};
+var blackKeyMap = {
+    C: false,
+    D: ['Cs', 'Db'],
+    E: ['Ds', 'Eb'],
+    F: false,
+    G: ['Fs', 'Gb'],
+    A: ['Gs', 'Ab'],
+    B: ['As', 'Bb']
 };
 
 // scientific notation
@@ -109,8 +118,6 @@ module.exports = function(parent, options) {
             startOctave++;
             endOctave++;
         }
-        console.log('startOctave: ', startOctave);
-        console.log('endOctave: ', endOctave);
 
     } else if (options.range != null) {
         startKey = options.range.startKey;
@@ -137,9 +144,9 @@ module.exports = function(parent, options) {
         for (var k=keyReverseMap.en[startKey]; k<(o === endOctave ? keyReverseMap.en[endKey]+1 : keysLength); k++) {
             var n = keys.en[k]; // key name
             var displayWhiteKey = getCurrentNotation(keys[lang][k], o);
-            if (blackKeyMap.en[n] && !firstOccurrence) {
-                var blackNames = blackKeyMap.en[n].map(function(k) {return k+o});
-                var displayBlackKey = blackKeyMap[lang][n][namesMode];
+            if (blackKeyMap[n] && !firstOccurrence) {
+                var blackNames = blackKeyMap[n].map(function(k) {return k+o});
+                var displayBlackKey = blackKeyNameMap[lang][n][namesMode];
                 keyElementArray.push('<li><div data-keyname=' +  displayWhiteKey + ' class="anchor ' + n + o + '"></div><span data-keyname="' + displayBlackKey + '" class="' + blackNames.join(' ') + '"></span></li>');
             } else {
                 keyElementArray.push('<li><div data-keyname=' + displayWhiteKey + ' class="anchor ' + n + o + '"></div></li>');

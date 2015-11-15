@@ -30,8 +30,6 @@ Don't forget to include the CSS file, for instance:
 piano(document.querySelector('body'), {octaves: 3});
 ```
 
-## API
-
 ### piano(parent, options)
 
 __Arguments:__
@@ -49,8 +47,27 @@ You can also pass a `namesMode` property.
 	- `lang` - A string, either `en` or `de` to swap __H__ and __B__
 	- `notation` - A string, either `scientific` or `helmholz` will be used for octave notation
 
+### Selectors
+
 You can toggle the pressed effect of each key with CSS class.
 For instance: `document.querySelector('.C4').classList.add('active')`
+
+The selector for the keys use the scientific notatino for the octave.
+All 12 keys for the fourth octave can be accessed with these selectors:
+
+
+`.C4`<br>
+`.Cs4` or `.Db4`<br>
+`.D4`<br>
+`.Ds4` or `.Eb4`<br>
+`.E4`<br>
+`.F4`<br>
+`.Fs4` or `.Gb4`<br>
+`.G4`<br>
+`.Gs4` or `.Ab4`<br>
+`.A4`<br>
+`.As4` or `.Bb`<br>
+`.B`
 
 ### Demo
 
