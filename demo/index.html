@@ -58,7 +58,13 @@
 		<fieldset>
 			<legend>Misc</legend>
 			<label>Show names: <input type="checkbox" id="names"></label>
-			<label>Show flats instead of sharps: <input type="checkbox" id="show-flats"></label>
+			<label>Language:
+			<select id="lang">
+				<option selected>en</option>
+				<option>de</option>
+			</select>
+			</label>
+			<label>Show flats: <input type="checkbox" id="show-flats"></label>
 			<label>shrink width: <input type="checkbox" id="shrink"></label>
 		</fieldset>
 	</form>
@@ -75,19 +81,67 @@
 		var rangeStartOctave = document.querySelector('#startOctave');
 		var rangeEndKey = document.querySelector('#endKey');
 		var rangeEndOctave = document.querySelector('#endOctave');
+		var langSelect = document.querySelector('#lang');
 		var showNamesInput = document.querySelector('#names');
 		var showFlats = document.querySelector('#show-flats');
 		var shrinkInput = document.querySelector('#shrink');
 
-		showFlats.addEventListener('change', function(e) {
-			var value = e.target.checked ? 'flat' : 'sharp';
-			if (typeInput[0].checked) {
-				clearContainer();
-				piano(container, {octaves: octaveInput.value, namesMode: value});
-			} else {
-				setCustomRange({namesMode: value});
+		var clearContainer = function() {
+			while (container.firstChild) {
+    			container.removeChild(container.firstChild);
 			}
-		});
+		}
+
+		var reinitPiano = function() {
+			var lang = langSelect.value;
+			var namesMode = showFlats.checked ? 'flat' : 'sharp';
+			clearContainer();
+			if (typeInput[0].checked) {
+				piano(container, {
+					octaves: octaveInput.value,
+					lang: lang,
+					namesMode: namesMode
+				});
+			} else if (typeInput[1].checked) {
+				piano(container, {
+					range: {
+						startKey: rangeStartKey.value,
+						startOctave: rangeStartOctave.value,
+						endKey: rangeEndKey.value,
+						endOctave: rangeEndOctave.value
+					},
+					namesMode: namesMode,
+					lang: lang
+				});
+			}
+		}
+
+		octaveInput.addEventListener('change', reinitPiano);
+		langSelect.addEventListener('change', reinitPiano);
+		showFlats.addEventListener('change', reinitPiano);
+		rangeStartKey.addEventListener('change', reinitPiano);
+		rangeStartOctave.addEventListener('change', reinitPiano);
+		rangeEndKey.addEventListener('change', reinitPiano);
+		rangeEndOctave.addEventListener('change', reinitPiano);
+
+		var typeHandler = function(e) {
+			if (e.target.value === 'octave') {
+				rangeStartKey.disabled = true;
+				rangeStartOctave.disabled = true;
+				rangeEndKey.disabled = true;
+				rangeEndOctave.disabled = true;
+				octaveInput.disabled = false;
+			} else if (e.target.value === 'range') {
+				octaveInput.disabled = true;
+				rangeStartKey.disabled = false;
+				rangeStartOctave.disabled = false;
+				rangeEndKey.disabled = false;
+				rangeEndOctave.disabled = false;
+			}
+			reinitPiano();
+		};
+		typeInput[0].addEventListener('change', typeHandler);
+		typeInput[1].addEventListener('change', typeHandler);
 
 		showNamesInput.addEventListener('change', function(e) {
 			if (e.target.checked) {
@@ -104,56 +158,6 @@
 				container.classList.remove('shrink');
 			}
 		});
-
-		var setCustomRange = function(options) {
-			if (options == null) {options = {}}
-			var namesMode = options.namesMode || 'sharp';
-			clearContainer();
-			piano(container, {
-				range: {
-					startKey: rangeStartKey.value,
-					startOctave: rangeStartOctave.value,
-					endKey: rangeEndKey.value,
-					endOctave: rangeEndOctave.value
-				},
-				namesMode: namesMode
-			});
-		};
-		var typeHandler = function(e) {
-			if (e.target.value === 'octave') {
-				rangeStartKey.disabled = true;
-				rangeStartOctave.disabled = true;
-				rangeEndKey.disabled = true;
-				rangeEndOctave.disabled = true;
-				octaveInput.disabled = false;
-				clearContainer();
-				piano(container, {octaves: octaveInput.value});
-			} else {
-				octaveInput.disabled = true;
-				rangeStartKey.disabled = false;
-				rangeStartOctave.disabled = false;
-				rangeEndKey.disabled = false;
-				rangeEndOctave.disabled = false;
-				setCustomRange();
-			}
-		};
-		typeInput[0].addEventListener('change', typeHandler);
-		typeInput[1].addEventListener('change', typeHandler);
-		// octave input listener
-		var clearContainer = function() {
-			while (container.firstChild) {
-    			container.removeChild(container.firstChild);
-			}
-		}
-		octaveInput.addEventListener('change', function(e) {
-			var value = e.target.value;
-			clearContainer();
-			piano(container, {octaves: value});
-		});
-		rangeStartKey.addEventListener('change', setCustomRange);
-		rangeStartOctave.addEventListener('change', setCustomRange);
-		rangeEndKey.addEventListener('change', setCustomRange);
-		rangeEndOctave.addEventListener('change', setCustomRange);
 
 	</script>
 	</body>
