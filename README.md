@@ -1,5 +1,8 @@
 # Beautiful Piano
 
+[![screenshot](./piano.png)](./piano.png)
+
+
 [![npm version](https://img.shields.io/npm/v/beautiful-piano.svg)](https://www.npmjs.com/package/beautiful-piano)
 [![npm dependencies](https://img.shields.io/david/MusicJS/beautiful-piano.svg)](https://david-dm.org/MusicJS/beautiful-piano)
 [![npm dev dependencies](https://img.shields.io/david/dev/MusicJS/beautiful-piano.svg)](https://david-dm.org/MusicJS/beautiful-piano#info=devDependencies)
