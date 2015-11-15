@@ -137,16 +137,18 @@ d
 /* white keys */
 .piano-show-names #beautiful-piano div[data-keyname]:not(:active):after {
   font-family: Arial, sans-serif;
+  font-size: 11px;
   content: attr(data-keyname);
   position: absolute;
   bottom: 25px;
-  left: 25%;
+  left: 30%;
 }
 
 /* black keys */
 .piano-show-names #beautiful-piano span[data-keyname]:not(:active):after {
   color: white;
   font-family: Arial, sans-serif;
+  font-size: 11px;
   content: attr(data-keyname);
   position: absolute;
   bottom: 8px;

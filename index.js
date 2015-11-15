@@ -1,51 +1,63 @@
 var domify = require('domify');
 
-var blackKeyClassMap = {
-    C: 0,
-    D: 1,
-    E: 2,
-    F: 3,
-    G: 4,
-    A: 5,
-    B: 6
+var keys = {
+    en: ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
+    de: ['C', 'D', 'E', 'F', 'G', 'A', 'H']
 };
-
-var keys = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 
 var keyReverseMap = {
-    C: 0,
-    D: 1,
-    E: 2,
-    F: 3,
-    G: 4,
-    A: 5,
-    B: 6
+    en: {
+        C: 0,
+        D: 1,
+        E: 2,
+        F: 3,
+        G: 4,
+        A: 5,
+        B: 6
+    },
+    de: {
+        C: 0,
+        D: 1,
+        E: 2,
+        F: 3,
+        G: 4,
+        A: 5,
+        H: 6
+    }
 };
 
-var keysLength = keys.length;
+var keysLength = keys.en.length;
 
 // black keys belongs to the previous white key
 // It's the DOM representation
 // avoid here to use #, because it's not a valid CSS selector
 var blackKeyMap = {
-    C: false,
-    D: ['Cs', 'Db'],
-    E: ['Ds', 'Eb'],
-    F: false,
-    G: ['Fs', 'Gb'],
-    A: ['Gs', 'Ab'],
-    B: ['As', 'Bb']
+    en: {
+        C: false,
+        D: ['C#', 'Db'],
+        E: ['D#', 'Eb'],
+        F: false,
+        G: ['F#', 'Gb'],
+        A: ['G#', 'Ab'],
+        B: ['A#', 'Bb']
+    },
+    de: {
+        C: false,
+        D: ['Cis', 'Des'],
+        E: ['Dis', 'Es'],
+        F: false,
+        G: ['Fis', 'Ges'],
+        A: ['Gis', 'As'],
+        B: ['As', 'B']
+    }
 };
-
-var convertAccidental = function(keyName) {
-    return keyName.replace('s', '#');
-}
 
 var octaves = [0,1,2,3,4,5,6,7,8,9,10];
 
 module.exports = function(parent, options) {
     if (options == null) {options = {}}
 
+    var lang = 'en';
     var startKey = 'A';
     var startOctave = 3;
     var endKey = 'C'
@@ -72,21 +84,26 @@ module.exports = function(parent, options) {
         endOctave = parseInt(options.range.endOctave);
 
     }
-    if (options.namesMode != null) {
-        if (options.namesMode === 'flat')  {
-            namesMode = 1;
-        }
+
+    if (options.namesMode === 'flat')  {
+        namesMode = 1;
+    }
+
+    if (options.lang === 'de') {
+        lang = 'de';
     }
     var keyElementArray = [];
     var firstOccurrence = true;
     for (var o=startOctave; o<=endOctave; o++) {
-        for (var k=keyReverseMap[startKey]; k<(o === endOctave ? keyReverseMap[endKey]+1 : keysLength); k++) {
-            var n = keys[k]; // key name
-            if (blackKeyMap[n] && !firstOccurrence) {
-                var blackNames = blackKeyMap[n].map(function(k) {return k+o});
-                keyElementArray.push('<li><div data-keyname=' +  n + o + ' class="anchor ' + n + o + '"></div><span data-keyname="' + convertAccidental(blackKeyMap[n][namesMode]) + '" class="' + blackNames.join(' ') + '"></span></li>');
+        for (var k=keyReverseMap.en[startKey]; k<(o === endOctave ? keyReverseMap.en[endKey]+1 : keysLength); k++) {
+            var n = keys.en[k]; // key name
+            var displayWhiteKey = keys[lang][k] + o;
+            if (blackKeyMap.en[n] && !firstOccurrence) {
+                var blackNames = blackKeyMap.en[n].map(function(k) {return k+o});
+                var displayBlackKey = blackKeyMap[lang][n][namesMode];
+                keyElementArray.push('<li><div data-keyname=' +  displayWhiteKey + ' class="anchor ' + n + o + '"></div><span data-keyname="' + displayBlackKey + '" class="' + blackNames.join(' ') + '"></span></li>');
             } else {
-                keyElementArray.push('<li><div data-keyname=' + n + o + ' class="anchor ' + n + o + '"></div></li>');
+                keyElementArray.push('<li><div data-keyname=' + displayWhiteKey + ' class="anchor ' + n + o + '"></div></li>');
             }
             if (firstOccurrence) {
                 firstOccurrence = false;
