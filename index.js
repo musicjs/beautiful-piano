@@ -48,7 +48,7 @@ var blackKeyNameMap = {
         F: false,
         G: ['Fis', 'Ges'],
         A: ['Gis', '&nbsp;As'],
-        B: ['&nbsp;As', '&nbsp;&nbsp;B']
+        B: ['Ais', '&nbsp;&nbsp;B']
     }
 };
 var blackKeyMap = {
