@@ -52,9 +52,37 @@ var blackKeyMap = {
     }
 };
 
+// scientific notation
 var octaves = [0,1,2,3,4,5,6,7,8,9,10];
 
+// https://de.wikipedia.org/wiki/Tonsymbol#Deutsche_Tonbezeichnungen
+var helmholtzNotation = [
+    {index: 2, upper: true},
+    {index: 1, upper: true},
+    {index: null, upper: true},
+    {index: null, upper: false},
+    {index: 1, upper: false},
+    {index: 2, upper: false},
+    {index: 3, upper: false},
+    {index: 4, upper: false},
+    {index: 5, upper: false},
+    {index: 6, upper: false},
+    {index: 7, upper: false},
+]
+
 module.exports = function(parent, options) {
+    var getCurrentNotation = function(key, octaveIndex) {
+        if (notation === 'scientific') {
+            return key + octaveIndex;
+        }
+        var result = helmholtzNotation[octaveIndex];
+        if (result.upper) {
+            return key.toUpperCase() + (result.index ? result.index : '')
+        } else {
+            return key.toLowerCase() + (result.index ? result.index : '')
+        }
+    }
+
     if (options == null) {options = {}}
 
     var lang = 'en';
@@ -63,6 +91,7 @@ module.exports = function(parent, options) {
     var endKey = 'C'
     var endOctave = 5;
     var namesMode = 0; // show sharps as default
+    var notation = 'scientific';
     if (options.octaves != null) {
         if (options.octaves <= 0) {
             console.warn('octaves need to be a positive number!');
@@ -76,6 +105,12 @@ module.exports = function(parent, options) {
             startOctave = 3 - oHalf;
             endOctave = 4 + oHalf;
         }
+        while (startOctave < 0) {
+            startOctave++;
+            endOctave++;
+        }
+        console.log('startOctave: ', startOctave);
+        console.log('endOctave: ', endOctave);
 
     } else if (options.range != null) {
         startKey = options.range.startKey;
@@ -92,12 +127,16 @@ module.exports = function(parent, options) {
     if (options.lang === 'de') {
         lang = 'de';
     }
+
+    if (options.notation === 'helmholz') {
+        notation = 'helmholz';
+    }
     var keyElementArray = [];
     var firstOccurrence = true;
     for (var o=startOctave; o<=endOctave; o++) {
         for (var k=keyReverseMap.en[startKey]; k<(o === endOctave ? keyReverseMap.en[endKey]+1 : keysLength); k++) {
             var n = keys.en[k]; // key name
-            var displayWhiteKey = keys[lang][k] + o;
+            var displayWhiteKey = getCurrentNotation(keys[lang][k], o);
             if (blackKeyMap.en[n] && !firstOccurrence) {
                 var blackNames = blackKeyMap.en[n].map(function(k) {return k+o});
                 var displayBlackKey = blackKeyMap[lang][n][namesMode];
