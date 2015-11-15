@@ -36,17 +36,21 @@ piano(document.querySelector('body'), {octaves: 3});
 
 __Arguments:__
 - `parent` - DOM element where to inject the piano
-- `options` Options object with either an `octaves` property or a `range` property.
+- `options` Options object, `octaves` and `range` property can't be used in combination
 You can also pass a `namesMode` property.
-	- `octaves` - A positive integer, the amount of octaves to generate, starts always with an __A__ and ends with a __C__
-	- `range` - Options object with a custm range, h
-		- `startKey` - A string, key where the piano should start
-		- `startOctave` - An integer on which octave the piano should start
-		- `endKey` - A string, key where the piano should end
-		- `endOctave` - An integer on which octave the piano should end
+	- `octaves` - A positive integer, the amount of octaves to generate,
+	starts always with an __A__ and ends with a __C__, min: 1, max: 9
+	- `range` - Options object with a custom range
+		- `startKey` - A string, key where the piano should start, `A-H`
+		- `startOctave` - An integer on which octave the piano should start, min: 0, max: 10
+		- `endKey` - A string, key where the piano should end, `A-H`
+		- `endOctave` - An integer on which octave the piano should end, min: 0, max: 10
 	- `namesMode` - A string, either `sharp` or `flat` when names for the black keys are shown
+	- `lang` - A string, either `en` or `de` to swap __H__ and __B__
+	- `notation` - A string, either `scientific` or `helmholz` will be used for octave notation
 
-
+You can toggle the pressed effect of each key with CSS class.
+For instance: `document.querySelector('.C4').classList.add('active')`
 
 ### Demo
 
