@@ -194,7 +194,7 @@
 			document.querySelector('.C4').classList.remove('active');
 			document.querySelector('.E4').classList.remove('active');
 			document.querySelector('.G4').classList.remove('active');
-
+			animationCheckbox.disabled = true;
 			var keys = ['.C4', '.Cs4', '.D4', '.Ds4', '.E4', '.F4', '.Fs4', '.G4', '.Gs4', '.A4', '.As4', '.B4'];
 			for (var i=0; i<keys.length; i++) {
 				// use IIFE to keep i in sync
@@ -205,6 +205,7 @@
 							setTimeout(function() {
 								document.querySelector(keys[i]).classList.remove('active');
 								if (i === keys.length-1) {
+									animationCheckbox.disabled = false;
 									animationCheckbox.checked = false;
 								}
 							}, 200);
