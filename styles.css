@@ -129,7 +129,7 @@ d
 
 /* white keys */
 .piano-show-names #beautiful-piano div[data-keyname]:not(:active):after {
-  font-family: Arial Unicode MS, Lucida Sans Unicode;
+  font-family: Arial, sans-serif;
   content: attr(data-keyname);
   position: absolute;
   bottom: 25px;
@@ -139,7 +139,7 @@ d
 /* black keys */
 .piano-show-names #beautiful-piano span[data-keyname]:not(:active):after {
   color: white;
-  font-family: Arial Unicode MS, Lucida Sans Unicode;
+  font-family: Arial, sans-serif;
   content: attr(data-keyname);
   position: absolute;
   bottom: 8px;

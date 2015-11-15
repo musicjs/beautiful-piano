@@ -39,7 +39,7 @@ var blackKeyMap = {
 };
 
 var convertAccidental = function(keyName) {
-    return keyName.replace('s', '♯').replace('b', '♭');
+    return keyName.replace('s', '\u0023').replace('b', '\u266D');
 }
 
 var octaves = [0,1,2,3,4,5,6,7,8,9,10];
