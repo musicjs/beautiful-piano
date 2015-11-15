@@ -29,7 +29,7 @@
 	<form>
 		<fieldset>
 			<legend><input type="radio" name="option-type" value="octave" checked> Octave Size</legend>
-			<input type="number" min=1 id="octaveChanger" value=1>
+			<input type="number" min=1 max=9 id="octaveChanger" value=1>
 		</fieldset>
 		<fieldset class="range">
 			<legend><input type="radio" name="option-type" value="range"> Custom Range</legend>
@@ -43,7 +43,7 @@
 				<option selected>A</option>
 				<option>B</option>
 			</select>
-			<input type="number" min=1 id="startOctave" value=3 disabled>
+			<input type="number" min=0 max=10 id="startOctave" value=3 disabled>
 			<span>to</span>
 			<select id="endKey" disabled>
 				<option>C</option>
@@ -54,19 +54,27 @@
 				<option>A</option>
 				<option>B</option>
 			</select>
-			<input type="number" min=1 id="endOctave" value=5 disabled>
+			<input type="number" min=0 max=10 id="endOctave" value=5 disabled>
 		</fieldset>
 		<fieldset>
-			<legend>Misc</legend>
+			<legend>Locale</legend>
 			<label>Show names: <input type="checkbox" id="names"></label>
 			<label>Language:
 			<select id="lang">
 				<option selected>en</option>
 				<option>de</option>
 			</select>
-			</label>
+			<label>Octava Notation:
+			<select id="octave-notation">
+				<option selected>scientific</option>
+				<option>helmholz</option>
+			</select>
+		</fieldset>
+		<fieldset>
+			<legend>Misc</legend>
 			<label>Show flats: <input type="checkbox" id="show-flats"></label>
 			<label>shrink width: <input type="checkbox" id="shrink"></label>
+			<label>press C chord: <input type="checkbox" id="c-chord"></label>
 		</fieldset>
 	</form>
 	<script>
@@ -82,10 +90,12 @@
 		var rangeStartOctave = document.querySelector('#startOctave');
 		var rangeEndKey = document.querySelector('#endKey');
 		var rangeEndOctave = document.querySelector('#endOctave');
+		var octaveNotationSelect = document.querySelector('#octave-notation');
 		var langSelect = document.querySelector('#lang');
 		var showNamesInput = document.querySelector('#names');
 		var showFlats = document.querySelector('#show-flats');
 		var shrinkInput = document.querySelector('#shrink');
+		var cChord = document.querySelector('#c-chord');
 
 		var clearContainer = function() {
 			while (container.firstChild) {
@@ -96,12 +106,14 @@
 		var reinitPiano = function() {
 			var lang = langSelect.value;
 			var namesMode = showFlats.checked ? 'flat' : 'sharp';
+			var octaveNotation = octaveNotationSelect.value;
 			clearContainer();
 			if (typeInput[0].checked) {
 				piano(container, {
 					octaves: octaveInput.value,
 					lang: lang,
-					namesMode: namesMode
+					namesMode: namesMode,
+					notation: octaveNotation
 				});
 			} else if (typeInput[1].checked) {
 				piano(container, {
@@ -112,13 +124,15 @@
 						endOctave: rangeEndOctave.value
 					},
 					namesMode: namesMode,
-					lang: lang
+					lang: lang,
+					notation: octaveNotation
 				});
 			}
 		}
 
 		octaveInput.addEventListener('change', reinitPiano);
 		langSelect.addEventListener('change', reinitPiano);
+		octaveNotationSelect.addEventListener('change', reinitPiano);
 		showFlats.addEventListener('change', reinitPiano);
 		rangeStartKey.addEventListener('change', reinitPiano);
 		rangeStartOctave.addEventListener('change', reinitPiano);
@@ -157,6 +171,18 @@
 				container.classList.add('shrink');
 			} else {
 				container.classList.remove('shrink');
+			}
+		});
+
+		cChord.addEventListener('change', function(e) {
+			if (e.target.checked) {
+				document.querySelector('.C4').classList.add('active');
+				document.querySelector('.E4').classList.add('active');
+				document.querySelector('.G4').classList.add('active');
+			} else {
+				document.querySelector('.C4').classList.remove('active');
+				document.querySelector('.E4').classList.remove('active');
+				document.querySelector('.G4').classList.remove('active');
 			}
 		});
 
