@@ -1,6 +1,6 @@
 {
   "name": "beautiful-piano",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "beautiful visualization of piano keys with pressed keys effect in plain HTML&CSS",
   "main": "index.js",
   "scripts": {
