@@ -34,21 +34,21 @@ var keysLength = keys.en.length;
 var blackKeyMap = {
     en: {
         C: false,
-        D: ['C#', 'Db'],
-        E: ['D#', 'Eb'],
+        D: ['&nbsp;C#', '&nbsp;Db'],
+        E: ['&nbsp;D#', '&nbsp;Eb'],
         F: false,
-        G: ['F#', 'Gb'],
-        A: ['G#', 'Ab'],
-        B: ['A#', 'Bb']
+        G: ['&nbsp;F#', '&nbsp;Gb'],
+        A: ['&nbsp;G#', '&nbsp;Ab'],
+        B: ['&nbsp;A#', '&nbsp;Bb']
     },
     de: {
         C: false,
         D: ['Cis', 'Des'],
-        E: ['Dis', 'Es'],
+        E: ['Dis', '&nbsp;Es'],
         F: false,
         G: ['Fis', 'Ges'],
-        A: ['Gis', 'As'],
-        B: ['As', 'B']
+        A: ['Gis', '&nbsp;As'],
+        B: ['&nbsp;As', '&nbsp;&nbsp;B']
     }
 };
 
