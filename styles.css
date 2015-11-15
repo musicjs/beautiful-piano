@@ -31,6 +31,12 @@
   width:40px;
   position:relative;
   border-top:2px solid #222;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 #beautiful-piano li a,#beautiful-piano li div.anchor {
@@ -126,6 +132,7 @@ d
 	background: linear-gradient(0,#444,#ccc);
     border-bottom: 0;
 }
+
 
 /* white keys */
 .piano-show-names #beautiful-piano div[data-keyname]:not(:active):after {
