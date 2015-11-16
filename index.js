@@ -6,24 +6,13 @@ var keys = {
 };
 
 var keyReverseMap = {
-    en: {
-        C: 0,
-        D: 1,
-        E: 2,
-        F: 3,
-        G: 4,
-        A: 5,
-        B: 6
-    },
-    de: {
-        C: 0,
-        D: 1,
-        E: 2,
-        F: 3,
-        G: 4,
-        A: 5,
-        H: 6
-    }
+    C: 0,
+    D: 1,
+    E: 2,
+    F: 3,
+    G: 4,
+    A: 5,
+    B: 6
 };
 
 var keysLength = keys.en.length;
@@ -141,7 +130,7 @@ module.exports = function(parent, options) {
     var keyElementArray = [];
     var firstOccurrence = true;
     for (var o=startOctave; o<=endOctave; o++) {
-        for (var k=keyReverseMap.en[startKey]; k<(o === endOctave ? keyReverseMap.en[endKey]+1 : keysLength); k++) {
+        for (var k=keyReverseMap[startKey]; k<(o === endOctave ? keyReverseMap[endKey]+1 : keysLength); k++) {
             var n = keys.en[k]; // key name
             var displayWhiteKey = getCurrentNotation(keys[lang][k], o);
             if (blackKeyMap[n] && !firstOccurrence) {
