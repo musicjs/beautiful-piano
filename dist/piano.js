@@ -7,24 +7,13 @@ var keys = {
 };
 
 var keyReverseMap = {
-    en: {
-        C: 0,
-        D: 1,
-        E: 2,
-        F: 3,
-        G: 4,
-        A: 5,
-        B: 6
-    },
-    de: {
-        C: 0,
-        D: 1,
-        E: 2,
-        F: 3,
-        G: 4,
-        A: 5,
-        H: 6
-    }
+    C: 0,
+    D: 1,
+    E: 2,
+    F: 3,
+    G: 4,
+    A: 5,
+    B: 6
 };
 
 var keysLength = keys.en.length;
@@ -142,15 +131,16 @@ module.exports = function(parent, options) {
     var keyElementArray = [];
     var firstOccurrence = true;
     for (var o=startOctave; o<=endOctave; o++) {
-        for (var k=keyReverseMap.en[startKey]; k<(o === endOctave ? keyReverseMap.en[endKey]+1 : keysLength); k++) {
+        for (var k=keyReverseMap[startKey]; k<(o === endOctave ? keyReverseMap[endKey]+1 : keysLength); k++) {
             var n = keys.en[k]; // key name
             var displayWhiteKey = getCurrentNotation(keys[lang][k], o);
             if (blackKeyMap[n] && !firstOccurrence) {
                 var blackNames = blackKeyMap[n].map(function(k) {return k+o});
                 var displayBlackKey = blackKeyNameMap[lang][n][namesMode];
-                keyElementArray.push('<li><div data-keyname=' +  displayWhiteKey + ' class="anchor ' + n + o + '"></div><span data-keyname="' + displayBlackKey + '" class="' + blackNames.join(' ') + '"></span></li>');
+                var blackIpnName = blackKeyNameMap['de'][n][0].replace('is', '#')
+                keyElementArray.push('<li><div data-ipn="' + n+o + '" data-keyname="' +  displayWhiteKey + '" class="anchor ' + n+o + '"></div><span data-ipn="' + blackIpnName+o + '" data-keyname="' + displayBlackKey + '" class="' + blackNames.join(' ') + '"></span></li>');
             } else {
-                keyElementArray.push('<li><div data-keyname=' + displayWhiteKey + ' class="anchor ' + n + o + '"></div></li>');
+                keyElementArray.push('<li><div data-ipn="' + n+o + '" data-keyname="' + displayWhiteKey + '" class="anchor ' + n+o + '"></div></li>');
             }
             if (firstOccurrence) {
                 firstOccurrence = false;
