@@ -123,21 +123,24 @@
 }
 
 /* white keys */
-.piano-show-names #beautiful-piano div[data-keyname]:not(:active):not(.active):after {
+#beautiful-piano.piano-show-names div[data-keyname]:not(:active):not(.active):after {
   font-family: Arial, sans-serif;
   font-size: 20px;
   content: attr(data-keyname);
   position: absolute;
   bottom: 25px;
-  left: 20%;
+  width: 100%;
+  text-align: center;
 }
 
 /* black keys */
-.piano-show-names #beautiful-piano span[data-keyname]:not(:active):not(.active):after {
+#beautiful-piano.piano-show-names span[data-keyname]:not(:active):not(.active):after {
   color: white;
   font-family: Arial, sans-serif;
   font-size: 11px;
   content: attr(data-keyname);
   position: absolute;
+  width: 100%;
+  text-align: center;
   bottom: 8px;
 }
