@@ -137,7 +137,7 @@ module.exports = function(parent, options) {
                 var blackNames = blackKeyMap[n].map(function(k) {return k+o});
                 var displayBlackKey = blackKeyNameMap[lang][n][namesMode];
                 var blackIpnName = blackKeyNameMap['de'][n][0].replace('is', '#')
-                keyElementArray.push('<li><div data-ipn="' + n+o + '" data-keyname="' +  displayWhiteKey + '" class="anchor ' + n+o + '"></div><span data-ipn="' + blackIpnName+o + '" data-keyname="' + displayBlackKey + '" class="' + blackNames.join(' ') + '"></span></li>');
+                keyElementArray.push('<li><div data-ipn="' + n+o + '" data-keyname="' +  displayWhiteKey + '" class="anchor white ' + n+o + '"></div><span data-ipn="' + blackIpnName+o + '" data-keyname="' + displayBlackKey + '" class="black ' + blackNames.join(' ') + '"></span></li>');
             } else {
                 keyElementArray.push('<li><div data-ipn="' + n+o + '" data-keyname="' + displayWhiteKey + '" class="anchor ' + n+o + '"></div></li>');
             }
