@@ -23,21 +23,21 @@ var keysLength = keys.en.length;
 var blackKeyNameMap = {
     en: {
         C: false,
-        D: ['&nbsp;C#', '&nbsp;Db'],
-        E: ['&nbsp;D#', '&nbsp;Eb'],
+        D: ['C#', 'Db'],
+        E: ['D#', 'Eb'],
         F: false,
-        G: ['&nbsp;F#', '&nbsp;Gb'],
-        A: ['&nbsp;G#', '&nbsp;Ab'],
-        B: ['&nbsp;A#', '&nbsp;Bb']
+        G: ['F#', 'Gb'],
+        A: ['G#', 'Ab'],
+        B: ['A#', 'Bb']
     },
     de: {
         C: false,
         D: ['Cis', 'Des'],
-        E: ['Dis', '&nbsp;Es'],
+        E: ['Dis', 'Es'],
         F: false,
         G: ['Fis', 'Ges'],
-        A: ['Gis', '&nbsp;As'],
-        B: ['Ais', '&nbsp;&nbsp;B']
+        A: ['Gis', 'As'],
+        B: ['Ais', 'B']
     }
 };
 var blackKeyMap = {
@@ -70,8 +70,9 @@ var helmholtzNotation = [
 
 module.exports = function(parent, options) {
     var getCurrentNotation = function(key, octaveIndex) {
+        var octname = nameOctaves ? octaveIndex : '';
         if (notation === 'scientific') {
-            return key + octaveIndex;
+            return key + octname;
         }
         var result = helmholtzNotation[octaveIndex];
         if (result.upper) {
@@ -88,8 +89,14 @@ module.exports = function(parent, options) {
     var startOctave = 3;
     var endKey = 'C'
     var endOctave = 5;
-    var namesMode = 0; // show sharps as default
+    var namesMode = null; // show sharps as default
+    var nameOctaves = true; 
     var notation = 'scientific';
+
+    var onKeyDown = null;
+    var onKeyUp = null;
+    var onKeyClick = null;
+
     if (options.octaves != null) {
         if (options.octaves <= 0) {
             console.warn('octaves need to be a positive number!');
@@ -116,16 +123,29 @@ module.exports = function(parent, options) {
 
     }
 
-    if (options.namesMode === 'flat')  {
-        namesMode = 1;
+    if (options.namesMode)  {
+        namesMode = options.namesMode;
     }
 
     if (options.lang === 'de') {
         lang = 'de';
     }
 
+    if (options.nameOctaves === false) {
+        nameOctaves = false
+    }
+
     if (options.notation === 'helmholz') {
         notation = 'helmholz';
+    }
+    if (options.onKeyClick && 'function' === typeof options.onKeyClick){
+        onKeyClick = options.onKeyClick;
+    }
+    if (options.onKeyDown && 'function' === typeof options.onKeyDown){
+        onKeyDown = options.onKeyDown;
+    }
+    if (options.onKeyUp && 'function' === typeof options.onKeyUp){
+        onKeyUp = options.onKeyUp;
     }
     var keyElementArray = [];
     var firstOccurrence = true;
@@ -135,11 +155,20 @@ module.exports = function(parent, options) {
             var displayWhiteKey = getCurrentNotation(keys[lang][k], o);
             if (blackKeyMap[n] && !firstOccurrence) {
                 var blackNames = blackKeyMap[n].map(function(k) {return k+o});
-                var displayBlackKey = blackKeyNameMap[lang][n][namesMode];
-                var blackIpnName = blackKeyNameMap['de'][n][0].replace('is', '#')
-                keyElementArray.push('<li><div data-ipn="' + n+o + '" data-keyname="' +  displayWhiteKey + '" class="anchor ' + n+o + '"></div><span data-ipn="' + blackIpnName+o + '" data-keyname="' + displayBlackKey + '" class="' + blackNames.join(' ') + '"></span></li>');
+                // sharp is the default
+                var displayBlackKey = blackKeyNameMap[lang][n][0];
+                switch(namesMode) {
+                    case 'flat':
+                        displayBlackKey = blackKeyNameMap[lang][n][1];
+                        break;
+                    case 'both':
+                        displayBlackKey = blackKeyNameMap[lang][n][0] + ' ' + blackKeyNameMap[lang][n][1];
+                        break;  
+                }
+                var blackIpnName = blackKeyNameMap['de'][n][0].replace('is', '#');
+                keyElementArray.push('<li class="oct' + o + '"><div data-ipn="' + n+o + '" data-keyname="' +  displayWhiteKey + '" class="anchor key white ' + n+o + '"></div><span data-ipn="' + blackIpnName+o + '" data-keyname="' + displayBlackKey + '" class="key black ' + blackNames.join(' ') + '"></span></li>');
             } else {
-                keyElementArray.push('<li><div data-ipn="' + n+o + '" data-keyname="' + displayWhiteKey + '" class="anchor ' + n+o + '"></div></li>');
+                keyElementArray.push('<li class="oct' + o + '"><div data-ipn="' + n+o + '" data-keyname="' + displayWhiteKey + '" class="anchor key white ' + n+o + '"></div></li>');
             }
             if (firstOccurrence) {
                 firstOccurrence = false;
@@ -147,6 +176,18 @@ module.exports = function(parent, options) {
         }
         startKey = 'C'; // continue next octave from C
     }
-    var pianoWrapper = domify('<ul id="beautiful-piano">\n  ' + keyElementArray.join('\n  ') + '</ul>')
+
+    var pianoclass = namesMode && namesMode.length > 0 ? 'piano-show-names' : '';
+    var pianoWrapper = domify('<ul id="beautiful-piano" class="' + pianoclass + '">\n  ' + keyElementArray.join('\n  ') + '</ul>')
+    var keydoms = pianoWrapper.getElementsByClassName('key');
+
+    // Add our event handlers
+    for (var kid=0; kid < keydoms.length; kid++){
+        var dataipn = keydoms[kid].getAttribute('data-ipn');
+        if (onKeyDown) keydoms[kid].onmousedown = onKeyDown.bind(null, dataipn);
+        if (onKeyUp) keydoms[kid].onmouseup = onKeyUp.bind(null, dataipn);
+        if (onKeyClick) keydoms[kid].onclick = onKeyClick.bind(null, dataipn);
+    }
+
     parent.appendChild(pianoWrapper);
 }
