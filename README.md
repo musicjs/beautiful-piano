@@ -42,7 +42,7 @@ piano(document.querySelector('body'), {octaves: 3});
 __Arguments:__
 - `parent` - DOM element where to inject the piano
 - `options` Options object, `octaves` and `range` property can't be used in combination
-You can also pass a `namesMode` property.
+You can also pass a `namesMode` property.  
 	- `octaves` - A positive integer, the amount of octaves to generate,
 	starts always with an __A__ and ends with a __C__, min: 1, max: 9
 	- `range` - Options object with a custom range
@@ -51,8 +51,12 @@ You can also pass a `namesMode` property.
 		- `endKey` - A string, key where the piano should end, `A-H`
 		- `endOctave` - An integer on which octave the piano should end, min: 0, max: 10
 	- `namesMode` - A string, either `sharp` or `flat` when names for the black keys are shown
+	- `nameOctaves` - A boolean, `false` means octave names will not be printed on the keyboard. 
 	- `lang` - A string, either `en` or `de` to swap __H__ and __B__
 	- `notation` - A string, either `scientific` or `helmholz` will be used for octave notation
+	- `onKeyClick` - A callback function
+	- `onKeyDown` - A callback function
+	- `onKeyUp` - A callback function
 
 ### Selectors
 
@@ -63,18 +67,45 @@ The selector for the keys use the scientific notatino for the octave.
 All 12 keys for the fourth octave can be accessed with these selectors:
 
 
-`.C4`<br>
-`.Cs4` or `.Db4`<br>
-`.D4`<br>
-`.Ds4` or `.Eb4`<br>
-`.E4`<br>
-`.F4`<br>
-`.Fs4` or `.Gb4`<br>
-`.G4`<br>
-`.Gs4` or `.Ab4`<br>
-`.A4`<br>
-`.As4` or `.Bb`<br>
-`.B`
+```css
+.C4 { }
+.Cs4, .Db4 { }
+.D4 { }
+.Ds4, .Eb4 { }
+.E4 { }
+.F4 { }
+.Fs4, .Gb4 { }
+.G4 { }
+.Gs4, .Ab4 { }
+.A4 { }
+.As4, .Bb { }
+.B  { } 
+```
+
+You can also select keys by their color and by their octave:
+
+```css
+/* Select all white keys */
+.white {}
+
+/* Select all black keys for octave 3*/
+.oct3 .black {}
+```
+
+## Event Handling
+
+If you pass in callback functions for `onKeyClick`, `onKeyDown` or `onKeyUp` you will be able to hook into the function and detect when keys are pressed:
+
+``` js
+
+function keyClickHandler(key) {
+	console.log('CLICK', key); 
+	// outputs "CLICK A#3", "CLICK C3" etc...
+}
+
+piano(document.querySelector('body'), {octaves: 3, onKeyClick});
+
+``
 
 ## WTF? I can't hear anything!
 
