@@ -69,6 +69,7 @@ All 12 keys for the fourth octave can be accessed with these selectors:
 
 ```css
 .C4 { }
+/* note, that .Cs4 and .Db4 will select the same object */
 .Cs4, .Db4 { }
 .D4 { }
 .Ds4, .Eb4 { }
@@ -97,15 +98,18 @@ You can also select keys by their color and by their octave:
 If you pass in callback functions for `onKeyClick`, `onKeyDown` or `onKeyUp` you will be able to hook into the function and detect when keys are pressed:
 
 ``` js
-
+/**
+ * Handle the click
+ * @param {string} key
+ */
 function keyClickHandler(key) {
 	console.log('CLICK', key); 
-	// outputs "CLICK A#3", "CLICK C3" etc...
+	// outputs: "CLICK A#3", "CLICK C3" etc...
 }
 
 piano(document.querySelector('body'), {octaves: 3, onKeyClick});
 
-``
+```
 
 ## WTF? I can't hear anything!
 
